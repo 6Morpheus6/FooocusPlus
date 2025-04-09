@@ -1,8 +1,8 @@
 const path = require("path")
 module.exports = {
   version: "3.0",
-  title: "Fooocus",
-  description: "Minimal Stable Diffusion UI",
+  title: "FooocusPlus",
+  description: "An enhanced version of Fooocus giving you access to all of the latest AI image generation models",
   icon: "icon.png",
   menu: async (kernel, info) => {
 
