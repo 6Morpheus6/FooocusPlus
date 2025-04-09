@@ -3,7 +3,7 @@ module.exports = {
     {
       method: "shell.run",
       params: {
-        messge: "git clone https://github.com/DavidDragonsage/FooocusPlus app"
+        message: "git clone https://github.com/DavidDragonsage/FooocusPlus app"
       }
     }, {
       method: "script.start",
