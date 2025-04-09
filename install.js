@@ -21,7 +21,7 @@ module.exports = {
       params: {
         venv: "env",
         path: "app",
-        message: "uv pip install -r requirements_versions.txt"
+        message: "uv pip install -r ../requirements_versions.txt --index-strategy unsafe-best-match"
       }
     },
     {
