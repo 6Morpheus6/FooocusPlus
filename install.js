@@ -86,7 +86,7 @@ module.exports = {
       method: "fs.share",
       params: {
         drive: {
-          "outputs": "app/outputs"
+          "outputs_focplus": "Outputs"
         }
       }
     },
