@@ -1,6 +1,10 @@
 module.exports = {
+  requires: {
+    bundle: "ai",
+  },
   run: [
     {
+      when: "{{!exists('app')}}",
       method: "shell.run",
       params: {
         message: "git clone https://github.com/DavidDragonsage/FooocusPlus app"
@@ -29,10 +33,10 @@ module.exports = {
       when: "{{platform === 'win32'}}",
       method: "shell.run",
       params: {
-        path: "app",
         message: [
-          "mkdir models\\clip_vision",
-          "mkdir models\\prompt_expansion"
+          "mkdir UserDir\\models\\checkpoints",
+          "mkdir UserDir\\models\\clip_vision",
+          "mkdir UserDir\\models\\prompt_expansion"
         ]
       },
         next: "share"
@@ -41,10 +45,10 @@ module.exports = {
       when: "{{platform !== 'win32'}}",
       method: "shell.run",
       params: {
-        path: "app",
         message: [
-          "mkdir -p models/clip_vision",
-          "mkdir -p models/prompt_expansion"
+          "mkdir -p UserDir/models/checkpoints",
+          "mkdir -p UserDir/models/clip_vision",
+          "mkdir -p UserDir/models/prompt_expansion"
         ]
       }
     },
@@ -53,23 +57,23 @@ module.exports = {
       method: "fs.share",
       params: {
         drive: {
-          "checkpoints": "app/models/checkpoints",
-          "clip": "app/models/clip",
-          "clip_vision": "app/models/clip_vision",
-          "configs": "app/models/configs",
-          "controlnet": "app/models/controlnet",
-          "diffusers": "app/models/diffusers",
-          "embeddings": "app/models/embeddings",
-          "gligen": "app/models/gligen",
-          "hypernetworks": "app/models/hypernetworks",
-          "inpaint": "app/models/inpaint",
-          "loras": "app/models/loras",
-          "prompt_expansion": "app/models/prompt_expansion",
-          "style_models": "app/models/style_models",
-          "unet": "app/models/unet",
-          "upscale_models": "app/models/upscale_models",
-          "vae": "app/models/vae",
-          "vae_approx": "app/models/vae_approx"
+          "checkpoints": "UserDir/models/checkpoints",
+          "clip": "UserDir/models/clip",
+          "clip_vision": "UserDir/models/clip_vision",
+          "configs": "UserDir/models/configs",
+          "controlnet": "UserDir/models/controlnet",
+          "diffusers": "UserDir/models/diffusers",
+          "embeddings": "UserDir/models/embeddings",
+          "gligen": "UserDir/models/gligen",
+          "hypernetworks": "UserDir/models/hypernetworks",
+          "inpaint": "UserDir/models/inpaint",
+          "loras": "UserDir/models/loras",
+          "prompt_expansion": "UserDir/models/prompt_expansion",
+          "style_models": "UserDir/models/style_models",
+          "unet": "UserDir/models/unet",
+          "upscale_models": "UserDir/models/upscale_models",
+          "vae": "UserDir/models/vae",
+          "vae_approx": "UserDir/models/vae_approx"
         },
         peers: [
           "https://github.com/cocktailpeanut/fluxgym.git",
@@ -86,38 +90,42 @@ module.exports = {
       method: "fs.share",
       params: {
         drive: {
-          "outputs_focplus": "Outputs"
+          "outputs_focplus": "UserDir/Outputs"
         }
       }
     },
     {
-      method: "hf.download",
+      method: "shell.run",
       params: {
-        path: "app/models/clip_vision",
-        "_": [ "openai/clip-vit-large-patch14" ],
-        "exclude": '"*.msgpack" "*.bin" "*.md" ".gittatributes"',
-        "local-dir": "clip-vit-large-patch14"
+        path: "UserDir/models/clip_vision",
+        message: 'hf download openai/clip-vit-large-patch14 --exclude="*.msgpack *.bin *.md .gittatributes" --local-dir="clip-vit-large-patch14"'
       }
     },
     {
-      method: "hf.download",
+      method: "shell.run",
       params: {
-        path: "app/models/prompt_expansion",
-        "_": [ "LykosAI/GPT-Prompt-Expansion-Fooocus-v2" ],
-        "exclude": '"LICENSE" "*.md" ".gittatributes"',
-        "local-dir": "fooocus_expansion"
+        path: "UserDir/models/prompt_expansion",
+        message: 'hf download LykosAI/GPT-Prompt-Expansion-Fooocus-v2 --exclude="LICENSE *.md .gittatributes" --local-dir="fooocus_expansion"'
       }
     },
     {
-      method: "fs.link",
+      method: "fs.download",
       params: {
-        venv: "app/env"
+        uri: "https://huggingface.co/DavidDragonsage/FooocusPlus/resolve/main/support/elsewhereXL_v10.safetensors?download=true",
+        dir: "UserDir/models/checkpoints",
+      }
+    },
+    {
+      "method": "fs.download",
+      "params": {
+        "uri": "https://huggingface.co/Comfy-Org/Lumina_Image_2.0_Repackaged/resolve/main/split_files/vae/ae.safetensors?download=true",
+        "dir": "UserDir/models/vae"
       }
     },
     {
       method: "notify",
       params: {
-        html: "App launched. Click 'start' to get started"
+        html: "Installation completed. Click Start to get started"
       }
     }
   ]
