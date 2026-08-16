@@ -1,6 +1,6 @@
 const path = require("path")
 module.exports = {
-  version: "3.0",
+  version: "8.0",
   title: "FooocusPlus",
   description: "An enhanced version of Fooocus giving you access to all of the latest AI image generation models",
   icon: "icon.png",
@@ -39,13 +39,6 @@ module.exports = {
         text: "Installing",
         href: "install.js",
       }]
-    } else if (running.update) {
-      return [{
-        default: true,
-        icon: 'fa-solid fa-terminal',
-        text: "Updating",
-        href: "update.js",
-      }]
     } else if (installed) {
       if (running.start) {
         let local = info.local("start.js")
@@ -70,6 +63,13 @@ module.exports = {
             params: { flags: `${alwaysCPU}${directml}--preset default${extraFlags}` }
           }]
         }
+      } else if (running.update) {
+        return [{
+          default: true,
+          icon: 'fa-solid fa-terminal',
+          text: "Updating",
+          href: "update.js",
+        }]
       } else if (running.reset) {
           return [{
             default: true,
