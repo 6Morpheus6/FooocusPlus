@@ -95,17 +95,21 @@ module.exports = {
       }
     },
     {
-      method: "shell.run",
+      method: "hf.download",
       params: {
         path: "UserDir/models/clip_vision",
-        message: 'hf download openai/clip-vit-large-patch14 --exclude="*.msgpack *.bin *.md .gittatributes" --local-dir="clip-vit-large-patch14"'
+        "_": [ "openai/clip-vit-large-patch14" ],
+        "exclude": [ "*.msgpack", "*.bin", "*.md", ".gittatributes" ],
+        "local-dir": "clip-vit-large-patch14"
       }
     },
     {
-      method: "shell.run",
+      method: "hf.download",
       params: {
         path: "UserDir/models/prompt_expansion",
-        message: 'hf download LykosAI/GPT-Prompt-Expansion-Fooocus-v2 --exclude="LICENSE *.md .gittatributes" --local-dir="fooocus_expansion"'
+        "_": [ "LykosAI/GPT-Prompt-Expansion-Fooocus-v2" ],
+        "exclude": [ "LICENSE", "*.md", ".gittatributes" ],
+        "local-dir": "fooocus_expansion"
       }
     },
     {
@@ -118,8 +122,8 @@ module.exports = {
     {
       "method": "fs.download",
       "params": {
-        "uri": "https://huggingface.co/Comfy-Org/Lumina_Image_2.0_Repackaged/resolve/main/split_files/vae/ae.safetensors?download=true",
-        "dir": "UserDir/models/vae"
+        uri: "https://huggingface.co/Comfy-Org/Lumina_Image_2.0_Repackaged/resolve/main/split_files/vae/ae.safetensors?download=true",
+        dir: "UserDir/models/vae"
       }
     },
     {
