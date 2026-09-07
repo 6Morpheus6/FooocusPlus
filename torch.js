@@ -8,7 +8,8 @@ module.exports = {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps"
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          "uv pip install bitsandbytes==0.49.2"
         ]
       },
       "next": null
@@ -21,26 +22,37 @@ module.exports = {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 {{args && args.xformers ? 'xformers==0.0.35' : ''}} --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
-          "uv pip install triton-windows==3.6.0.post26",
-          "uv pip install https://github.com/woct0rdho/SageAttention/releases/download/v2.2.0-windows.post5/sageattention-2.2.0+cu130torch2.10.0andhigher.post5-cp310-abi3-win_amd64.whl --no-deps",
-          "uv pip install bitsandbytes==0.48.0"
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          "uv pip install triton-windows==3.3.1.post19",
+          "uv pip install bitsandbytes==0.49.2"
         ]
       },
       "next": null
     },
-    // windows nvidia RTX30 - RTX60 PRO
+    // windows nvidia RTX30 - RTX40
     {
-      "when": "{{platform === 'win32' && gpu === 'nvidia' && /^sm_(86|89|90|120)$/.test(gpu_target)}}",
+      "when": "{{platform === 'win32' && gpu === 'nvidia' && /^sm_(86|89|90)$/.test(gpu_target)}}",
       "method": "shell.run",
       "params": {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 {{args && args.xformers ? 'xformers==0.0.35' : ''}} --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
-          "uv pip install triton-windows==3.6.0.post26",
-          "uv pip install https://github.com/woct0rdho/SageAttention/releases/download/v2.2.0-windows.post5/sageattention-2.2.0+cu130torch2.10.0andhigher.post5-cp310-abi3-win_amd64.whl --no-deps",
-          "uv pip install https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.7.13/flash_attn-2.8.3+cu130torch2.10-cp310-cp310-win_amd64.whl --no-deps",
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          "uv pip install triton-windows==3.3.1.post19",
+          "uv pip install bitsandbytes==0.49.2"
+        ]
+      },
+      "next": null
+    },
+    // windows nvidia RTX50 - RTX60 PRO, DGX Spark
+    {
+      "when": "{{platform === 'win32' && gpu === 'nvidia' && /^sm_(120|121)$/.test(gpu_target)}}",
+      "method": "shell.run",
+      "params": {
+        "venv": "{{args && args.venv ? args.venv : null}}",
+        "path": "{{args && args.path ? args.path : '.'}}",
+        "message": [
+          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
           "uv pip install bitsandbytes==0.48.0"
         ]
       },
@@ -137,7 +149,21 @@ module.exports = {
       "params": {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
-        "message": "uv pip install torch torchvision torchaudio --force-reinstall --no-deps"
+        "message": [
+          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --force-reinstall --no-deps",
+          "uv pip install bitsandbytes==0.49.2"
+        ]
+      },
+      "next": null
+    },
+    // intel mac
+    {
+      "when": "{{platform === 'darwin' && arch !== 'arm64'}}",
+      "method": "shell.run",
+      "params": {
+        "venv": "{{args && args.venv ? args.venv : null}}",
+        "path": "{{args && args.path ? args.path : '.'}}",
+        "message": "uv pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps"
       },
       "next": null
     },
@@ -146,10 +172,12 @@ module.exports = {
       "when": "{{platform === 'linux' && gpu === 'nvidia' && /gtx\\s*1[06]/i.test(gpu_model)}}",
       "method": "shell.run",
       "params": {
+        "bluefairy": "off",
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps"
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall",
+          "uv pip install bitsandbytes==0.49.2"
         ]
       },
       "next": null
@@ -163,43 +191,38 @@ module.exports = {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 {{args && args.xformers ? 'xformers==0.0.35' : ''}} --index-url https://download.pytorch.org/whl/cu130 --force-reinstall",
-          "uv pip install https://github.com/Comfy-Org/wheels/releases/download/sageattention-latest/sageattention-2.2.0%2Bcu130torch2.10-cp310-cp310-manylinux_2_34_x86_64.manylinux_2_35_x86_64.whl --no-deps",
-          "uv pip install bitsandbytes==0.48.0"
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall",
+          "uv pip install bitsandbytes==0.49.2"
         ]
       },
       "next": null
     },
-    // linux nvidia RTX30 - RTX60 PRO
+    // linux nvidia RTX30 - RTX40
     {
-      "when": "{{gpu === 'nvidia' && platform === 'linux' && /^sm_(86|89|90|120)$/.test(gpu_target)}}",
+      "when": "{{gpu === 'nvidia' && platform === 'linux' && /^sm_(86|89|90)$/.test(gpu_target)}}",
       "method": "shell.run",
       "params": {
         "bluefairy": "off",
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
-          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 {{args && args.xformers ? 'xformers==0.0.35' : ''}} --index-url https://download.pytorch.org/whl/cu130 --force-reinstall",
-          "uv pip install https://github.com/Comfy-Org/wheels/releases/download/sageattention-latest/sageattention-2.2.0%2Bcu130torch2.10-cp310-cp310-manylinux_2_34_x86_64.manylinux_2_35_x86_64.whl --no-deps",
-          "uv pip install https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.9.0/flash_attn-2.8.3+cu130torch2.10-cp310-cp310-linux_x86_64.whl --no-deps",
-          "uv pip install bitsandbytes==0.48.0"
+          "uv pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 {{args && args.xformers ? 'xformers==0.0.30' : ''}} --index-url https://download.pytorch.org/whl/cu128 --force-reinstall",
+          "uv pip install bitsandbytes==0.49.2"
         ]
       },
       "next": null
     },
-    // linux nvidia DGX Spark
+    // linux nvidia RTX50 - RTX60 PRO, DGX Spark
     {
-      "when": "{{gpu === 'nvidia' && platform === 'linux' && gpu_target === 'sm_121'}}",
+      "when": "{{gpu === 'nvidia' && platform === 'linux' && /^sm_(120|121)$/.test(gpu_target)}}",
       "method": "shell.run",
       "params": {
         "bluefairy": "off",
-        "env": { "UV_HTTP_TIMEOUT": "60" },
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
         "message": [
           "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall",
-          "uv pip install https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.7.16/flash_attn-2.8.3+cu130torch2.10-cp310-cp310-linux_aarch64.whl --no-deps",
-          "uv pip install https://huggingface.co/cocktailpeanut/wheels/resolve/main/sageattention-2.2.0%2Bcu130torch2.10.0andhigher-cp310-abi3-linux_aarch64.whl --no-deps"
+          "uv pip install bitsandbytes==0.48.0"
         ]
       },
       "next": null
@@ -212,7 +235,10 @@ module.exports = {
         "bluefairy": "off",
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
-        "message": "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/rocm7.1 --force-reinstall"
+        "message": [
+          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/rocm7.1 --force-reinstall",
+          "uv pip install bitsandbytes==0.49.2"
+        ]
       },
       "next": null
     },
@@ -222,7 +248,10 @@ module.exports = {
       "params": {
         "venv": "{{args && args.venv ? args.venv : null}}",
         "path": "{{args && args.path ? args.path : '.'}}",
-        "message": "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0  --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps"
+        "message": [
+          "uv pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0  --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps",
+          "uv pip install bitsandbytes==0.49.2"
+        ]
       }
     }
   ]

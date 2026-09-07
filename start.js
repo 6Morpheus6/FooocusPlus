@@ -8,7 +8,7 @@ module.exports = {
     params: {
       venv: "env",
       path: "app",
-      message: "python launch.py {{input.flags}}",
+      message: "python launch.py --gpu-type none {{input.flags}}",
       on: [{
         event: "/http:\/\/[0-9.:]+/",
         done: true
