@@ -6,15 +6,6 @@ module.exports = {
   icon: "icon.png",
   menu: async (kernel, info) => {
 
-    // exception handling for windows amd
-    let windowsAmd = (kernel.gpu === "amd" && kernel.platform === "win32")
-    let extraFlags = (windowsAmd ? " --directml --disable-in-browser" : " --disable-in-browser")
-
-    // windows AMD => directml
-    let windowsAMD = (kernel.platform === "win32" && kernel.gpu === "amd")
-    let directml = (windowsAMD ? "--directml " : "")
-    console.log({ windowsAMD, directml })
-
     let accelerated
 
     if (kernel.platform === "darwin") {
@@ -52,7 +43,7 @@ module.exports = {
             icon: 'fa-solid fa-terminal',
             text: "Terminal",
             href: "start.js",
-            params: { flags: `${alwaysCPU}${directml}--preset default${extraFlags}` }
+            params: { flags: `${alwaysCPU}--disable-in-browser` }
           }]
         } else {
           return [{
@@ -60,7 +51,7 @@ module.exports = {
             icon: 'fa-solid fa-terminal',
             text: "Terminal",
             href: "start.js",
-            params: { flags: `${alwaysCPU}${directml}--preset default${extraFlags}` }
+            params: { flags: `${alwaysCPU}--disable-in-browser` }
           }]
         }
       } else if (running.update) {
@@ -83,7 +74,7 @@ module.exports = {
           icon: "fa-solid fa-power-off",
           text: "Start",
           href: "start.js",
-          params: { flags: `${alwaysCPU}${directml}--preset default${extraFlags}` }
+          params: { flags: `${alwaysCPU}--disable-in-browser` }
         }, {
           icon: "fa-solid fa-plug",
           text: "Update",
