@@ -4,11 +4,28 @@ module.exports = {
   },
   daemon: true,
   run: [{
+    // If no language has been selected yet (e.g. existing installs), default to English
+    when: "{{!exists('language.json')}}",
+    method: "json.set",
+    params: {
+      "language.json": {
+        language: "en"
+      }
+    }
+  }, {
+    // Load the persisted language selection into local.lang
+    method: "json.get",
+    params: {
+      lang: "language.json"
+    }
+  }, {
     method: "shell.run",
     params: {
       venv: "env",
       path: "app",
-      message: "python launch.py --gpu-type none {{input.flags}}",
+      // Use args.flags (not input.flags): input is overwritten by the json.get/json.set
+      // steps above, while args always holds the params passed in from pinokio.js
+      message: "python entry_with_update.py --gpu-type none {{args.flags}} --language {{local.lang.language}}",
       on: [{
         event: "/http:\/\/[0-9.:]+/",
         done: true
@@ -18,6 +35,8 @@ module.exports = {
       }]
     }
   }, {
+    // Only set the url when the shell actually printed one (guarded, like the official examples)
+    when: "{{input && input.event && Array.isArray(input.event) && input.event.length > 0}}",
     method: "local.set",
     params: {
       url: "{{input.event[0]}}"

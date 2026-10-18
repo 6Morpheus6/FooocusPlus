@@ -21,7 +21,8 @@ module.exports = {
       install: info.running("install.js"),
       start: info.running("start.js"),
       update: info.running("update.js"),
-      reset: info.running("reset.js")
+      reset: info.running("reset.js"),
+      language: info.running("language.js")
     }
     if (running.install) {
       return [{
@@ -68,6 +69,13 @@ module.exports = {
             text: "Resetting",
             href: "reset.js",
           }]
+      } else if (running.language) {
+          return [{
+            default: true,
+            icon: 'fa-solid fa-terminal',
+            text: "Selecting Language",
+            href: "language.js",
+          }]
       } else {
         return [{
           default: true,
@@ -79,6 +87,10 @@ module.exports = {
           icon: "fa-solid fa-plug",
           text: "Update",
           href: "update.js",
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Select Language",
+          href: "language.js",
         }, {
           icon: "fa-solid fa-plug",
           text: "Install",
