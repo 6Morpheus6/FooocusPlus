@@ -72,7 +72,7 @@ module.exports = {
       } else if (running.language) {
           return [{
             default: true,
-            icon: 'fa-solid fa-terminal',
+            icon: 'fa-solid fa-language',
             text: "Selecting Language",
             href: "language.js",
           }]
@@ -88,7 +88,7 @@ module.exports = {
           text: "Update",
           href: "update.js",
         }, {
-          icon: "fa-solid fa-plug",
+          icon: "fa-solid fa-language",
           text: "Select Language",
           href: "language.js",
         }, {
