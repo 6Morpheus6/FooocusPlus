@@ -288,9 +288,16 @@ module.exports = {
       }
     },
     {
+    // Load the persisted language selection into local.lang
+    method: "json.get",
+    params: {
+      lang: "language.json"
+    }
+    },
+    {
       method: "notify",
       params: {
-        html: "Installation completed. Selected language: {{input.selection}}. Click Start to get started"
+        html: "Installation completed.<br>Selected language: {{local.lang.language}}.<br>Click Start to get started."
       }
     }
   ]

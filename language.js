@@ -162,9 +162,16 @@ run:[
       }
     },
     {
+      // Load the persisted language selection into local.lang
+      method: "json.get",
+      params: {
+        lang: "language.json"
+      }
+    },
+    {
       method: "notify",
       params: {
-        html: "Selected Language: {{input.selection}}"
+        html: "Selected Language: {{local.lang.language}}.<br>Click Start to get started."
       }
     }
   ]
