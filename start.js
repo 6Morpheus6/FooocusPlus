@@ -27,7 +27,7 @@ module.exports = {
       // steps above, while args always holds the params passed in from pinokio.js
       message: "python entry_with_update.py --gpu-type none {{args.flags}} --language {{local.lang.language}}",
       on: [{
-        event: "/http:\/\/[0-9.:]+/",
+        event: "/Comfy loading complete!/",
         done: true
       }, {
         event: "/error:/i",
@@ -39,7 +39,7 @@ module.exports = {
     when: "{{input && input.event && Array.isArray(input.event) && input.event.length > 0}}",
     method: "local.set",
     params: {
-      url: "{{input.event[0]}}"
+      url: "http://127.0.0.1:7860"
     }
   }]
 }
