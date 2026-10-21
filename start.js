@@ -25,7 +25,7 @@ module.exports = {
       path: "app",
       // Use args.flags (not input.flags): input is overwritten by the json.get/json.set
       // steps above, while args always holds the params passed in from pinokio.js
-      message: "python entry_with_update.py --gpu-type none {{args.flags}} --language {{local.lang.language}}",
+      message: "{{platform === 'darwin' ? 'DYLD_LIBRARY_PATH=$(echo ./env/lib/python*/site-packages/torch/lib) ' : ''}}python entry_with_update.py --gpu-type none {{args.flags}} --language {{local.lang.language}}",
       on: [{
         event: "/Comfy loading complete!/",
         done: true
