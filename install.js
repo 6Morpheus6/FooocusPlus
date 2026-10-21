@@ -11,6 +11,33 @@ module.exports = {
       }
     },
     {
+      when: "{{platform === 'win32'}}",
+      method: "shell.run",
+      params: {
+        venv: "env",
+        path: "app",
+        message: "uv pip install -r requirements_windows.txt"
+      }
+    },
+    {
+      when: "{{platform === 'linux'}}",
+      method: "shell.run",
+      params: {
+        venv: "env",
+        path: "app",
+        message: "uv pip install -r requirements_linux.txt"
+      }
+    },
+    {
+      when: "{{platform === 'darwin'}}",
+      method: "shell.run",
+      params: {
+        venv: "env",
+        path: "app",
+        message: "uv pip install -r requirements_macos.txt"
+      }
+    },
+    {
       method: "shell.run",
       params: {
         venv: "env",
