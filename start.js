@@ -23,11 +23,19 @@ module.exports = {
     params: {
       venv: "env",
       path: "app",
+      // macOS-only DYLD prefix belongs in the step-level `env`, never inline in the
+      // command: a shell-word-style {{platform === 'darwin' ? ... : ''}} expression must
+      // resolve to a single template value before it reaches the shell. On Windows an
+      // unresolved {{...}} block gets parsed as a command, which is why the whole
+      // message (args.flags + local.lang) looked like it "wasn't filled".
       // Use args.flags (not input.flags): input is overwritten by the json.get/json.set
       // steps above, while args always holds the params passed in from pinokio.js
-      message: "{{platform === 'darwin' ? 'DYLD_LIBRARY_PATH=$(echo ./env/lib/python*/site-packages/torch/lib) ' : 'python entry_with_update.py --gpu-type none {{args.flags}} --language {{local.lang.language}}'}}",
+      env: (kernel) => (kernel.platform === "darwin" ? {
+        DYLD_LIBRARY_PATH: "./env/lib/python*/site-packages/torch/lib"
+      } : {}),
+      message: `python entry_with_update.py --gpu-type none ${"{{args.flags}}"} --language ${"{{local.lang.language}}"}`,
       on: [{
-        event: "/(http:\\/\\/[0-9.:]+)/",
+        event: "/Comfy loading complete!/",
         done: true
       }, {
         event: "/errno/i",
@@ -42,7 +50,7 @@ module.exports = {
     when: "{{input && input.event && Array.isArray(input.event) && input.event.length > 0}}",
     method: "local.set",
     params: {
-      url: "{{input.event[1]}}"
+      url: "http://127.0.0.1:7860"
     }
   }]
 }
